@@ -28,7 +28,9 @@ module.exports.updateMeetup = function(req, res){
 };
 module.exports.updateMeetupVote = function(req, res){
     console.log(req.body.vote);
-  Meetup.findByIdAndUpdate(req.params.id, { $set: {'vote': req.body.vote, 'voteup': req.body.voteup, 'votedown': req.body.votedown} }, function(err, results) {
+  Meetup.findByIdAndUpdate(req.params.id, { $set: 
+      { voting: [{'vote': req.body.vote, 'voteup': req.body.voteup, 'votedown': req.body.votedown }]} 
+                                          }, function(err, results) {
     if (err)
       res.send(err + 'error');
     res.json(results);

@@ -23,7 +23,8 @@ myapp.controller('meetupsController', ['$resource', '$scope', '$http', 'Post', f
     vm.meetups = [];
     vm.data = {};
     Post.query(function(results){
-        vm.meetups = results
+        vm.meetups = results;
+        console.log(vm.meetups[0].voting[0].vote);
     });
      vm.editing = false;
      vm.updateId = '';
@@ -74,39 +75,35 @@ myapp.controller('meetupsController', ['$resource', '$scope', '$http', 'Post', f
      
      vm.up = function(item, index){
          vm.item = item;
-        // console.log(vm.item.voteup)
-         if(vm.item.voteup){
+         if(vm.item.voting[0].voteup){
              vm.updatevoteID = vm.item._id;
              var meetup = new Post();
-             meetup.vote = vm.item.vote + 1;
+             meetup.vote = vm.item.voting[0].vote + 1 ;
              meetup.voteup = false;
              meetup.votedown = true;
              meetup.$updatevote({id: vm.updatevoteID}, function(results){
-               vm.meetups[index].vote = vm.meetups[index].vote + 1;
                 Post.query(function(results){
-                    vm.meetups = results
+                    vm.meetups = results;
                 });
              });
          }
      }
      
-     vm.down = function(item, index){
+      vm.down = function(item, index){
          vm.item = item;
-         //console.log(vm.item.voteup)
-         if(vm.item.votedown){
+         if(vm.item.voting[0].votedown){
              vm.updatevoteID = vm.item._id;
              var meetup = new Post();
-             meetup.vote = vm.item.vote - 1 ;
+             meetup.vote = vm.item.voting[0].vote - 1 ;
              meetup.voteup = true;
              meetup.votedown = false;
              meetup.$updatevote({id: vm.updatevoteID}, function(){
-                vm.meetups[index].vote = vm.meetups[index].vote - 1;
                 Post.query(function(results){
                     vm.meetups = results
                 });
              });
          }
-     };
+     }; 
      
 }]).controller('testupsController', ['$resource', '$scope', '$http', 'Post2', function($resource, $scope, $http, Post2){
     var vm = this;
